@@ -177,15 +177,14 @@ diff --git a/drivers/gpu/drm/virtio/virtgpu_kms.c b/drivers/gpu/drm/virtio/virtg
 index 7dfb2006c561..fa4e5542fe5b 100644
 --- a/drivers/gpu/drm/virtio/virtgpu_kms.c
 +++ b/drivers/gpu/drm/virtio/virtgpu_kms.c
-@@ -196,12 +196,16 @@ int virtio_gpu_init(struct virtio_device *vdev, struct drm_device *dev)
- 	if (virtio_has_feature(vgdev->vdev, VIRTIO_GPU_F_CONTEXT_INIT)) {
+@@ -196,11 +196,15 @@ int virtio_gpu_init(struct virtio_device *vdev, struct drm_device *dev)
+ 	if (virtio_has_feature(vgdev->vdev, VIRTIO_GPU_F_CONTEXT_INIT))
  		vgdev->has_context_init = true;
- 	}
-+	if (virtio_has_feature(vgdev->vdev, VIRTIO_GPU_F_FENCE_PASSING)) {
-+		vgdev->has_fence_passing = true;
-+	}
  
 -	DRM_INFO("features: %cvirgl %cedid %cresource_blob %chost_visible",
++	if (virtio_has_feature(vgdev->vdev, VIRTIO_GPU_F_FENCE_PASSING))
++		vgdev->has_fence_passing = true;
++
 +	DRM_INFO("features: %cvirgl %cedid %cresource_blob %chost_visible %cfence_passing",
  		 vgdev->has_virgl_3d    ? '+' : '-',
  		 vgdev->has_edid        ? '+' : '-',

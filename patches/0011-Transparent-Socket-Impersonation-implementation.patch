@@ -85,9 +85,9 @@ index 65bb8c72a35e..c1db937f3212 100644
 --- a/net/Makefile
 +++ b/net/Makefile
 @@ -79,3 +79,4 @@ obj-$(CONFIG_XDP_SOCKETS)	+= xdp/
- obj-$(CONFIG_MPTCP)		+= mptcp/
  obj-$(CONFIG_MCTP)		+= mctp/
  obj-$(CONFIG_NET_HANDSHAKE)	+= handshake/
+ obj-$(CONFIG_NET_SHAPER)	+= shaper/
 +obj-$(CONFIG_TSI)		+= tsi/
 diff --git a/net/socket.c b/net/socket.c
 index 878155076bc0..a55927134851 100644

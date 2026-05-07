@@ -940,7 +940,7 @@ index 000000000000..0344dd03bd82
 +	/* Set Virtio CAN supported operations */
 +	priv->can.ctrlmode_supported = CAN_CTRLMODE_BERR_REPORTING;
 +	if (virtio_has_feature(vdev, VIRTIO_CAN_F_CAN_FD)) {
-+		priv->can.data_bittiming.bitrate = CAN_BITRATE_UNKNOWN;
++		priv->can.fd.data_bittiming.bitrate = CAN_BITRATE_UNKNOWN;
 +		err = can_set_static_ctrlmode(dev, CAN_CTRLMODE_FD);
 +		if (err != 0)
 +			goto on_failure;
@@ -1173,4 +1173,3 @@ index 000000000000..08d7e3e78776
 +#endif /* #ifndef _LINUX_VIRTIO_VIRTIO_CAN_H */
 -- 
 2.54.0
-

@@ -20,15 +20,15 @@ index b91124b2d334..b78ea85c953a 100644
 --- a/kernel/exit.c
 +++ b/kernel/exit.c
 @@ -69,6 +69,8 @@
- #include <linux/rethook.h>
  #include <linux/sysfs.h>
  #include <linux/user_events.h>
+ #include <linux/unwind_deferred.h>
 +#include <linux/reboot.h>
 +
  #include <linux/uaccess.h>
+ #include <linux/pidfs.h>
  
- #include <uapi/linux/wait.h>
-@@ -906,8 +908,12 @@ void __noreturn do_exit(long code)
+@@ -905,8 +907,12 @@ void __noreturn do_exit(long code)
  		 * immediately to get a useable coredump.
  		 */
  		if (unlikely(is_global_init(tsk)))

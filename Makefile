@@ -104,7 +104,7 @@ $(KERNEL_TARBALL):
 
 $(KERNEL_SOURCES): $(KERNEL_TARBALL)
 	tar xf $(KERNEL_TARBALL)
-	for patch in $(KERNEL_PATCHES); do patch -p1 -d $(KERNEL_SOURCES) < "$$patch"; done
+	for patch in $(KERNEL_PATCHES); do echo $$patch; patch -p1 -d $(KERNEL_SOURCES) < "$$patch" || exit 1; done
 	cp config-libkrunfw$(VARIANT)_$(GUESTARCH) $(KERNEL_SOURCES)/.config
 	cd $(KERNEL_SOURCES) ; $(MAKE) olddefconfig
 

@@ -137,9 +137,9 @@ index 9ba6e2bcef94..5f93bb290a83 100644
 --- a/include/net/af_vsock.h
 +++ b/include/net/af_vsock.h
 @@ -230,6 +230,7 @@ void vsock_for_each_connected_socket(struct vsock_transport *transport,
- 				     void (*fn)(struct sock *sk));
  int vsock_assign_transport(struct vsock_sock *vsk, struct vsock_sock *psk);
  bool vsock_find_cid(unsigned int cid);
+ void vsock_linger(struct sock *sk);
 +struct sock *vsock_find_bound_dgram_socket(struct sockaddr_vm *addr);
  
  /**** TAP ****/
@@ -332,7 +332,7 @@ diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_tran
 index 3a996272764b..a7e9bcc49a8e 100644
 --- a/net/vmw_vsock/virtio_transport_common.c
 +++ b/net/vmw_vsock/virtio_transport_common.c
-@@ -227,7 +227,9 @@ EXPORT_SYMBOL_GPL(virtio_transport_deliver_tap_pkt);
+@@ -242,7 +271,9 @@ EXPORT_SYMBOL_GPL(virtio_transport_deliver_tap_pkt);
  
  static u16 virtio_transport_get_type(struct sock *sk)
  {
@@ -411,7 +411,7 @@ index 3a996272764b..a7e9bcc49a8e 100644
  int virtio_transport_connect(struct vsock_sock *vsk)
  {
  	struct virtio_vsock_pkt_info info = {
-@@ -1102,7 +1096,32 @@ virtio_transport_dgram_enqueue(struct vsock_sock *vsk,
+@@ -1118,7 +1141,32 @@ virtio_transport_dgram_enqueue(struct vsock_sock *vsk,
  			       struct msghdr *msg,
  			       size_t dgram_len)
  {
@@ -445,7 +445,7 @@ index 3a996272764b..a7e9bcc49a8e 100644
  }
  EXPORT_SYMBOL_GPL(virtio_transport_dgram_enqueue);
  
-@@ -1189,7 +1208,7 @@ static int virtio_transport_reset_no_sock(const struct virtio_transport *t,
+@@ -1205,7 +1255,7 @@ static int virtio_transport_reset_no_sock(const struct virtio_transport *t,
  					   le64_to_cpu(hdr->src_cid),
  					   le32_to_cpu(hdr->src_port));
  	if (!reply)
