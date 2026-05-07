@@ -40,15 +40,15 @@ index 03b0e789d161..deaadc2503a2 100644
 --- a/drivers/vhost/vsock.c
 +++ b/drivers/vhost/vsock.c
 @@ -32,7 +32,8 @@
- enum {
- 	VHOST_VSOCK_FEATURES = VHOST_FEATURES |
- 			       (1ULL << VIRTIO_F_ACCESS_PLATFORM) |
--			       (1ULL << VIRTIO_VSOCK_F_SEQPACKET)
-+			       (1ULL << VIRTIO_VSOCK_F_SEQPACKET) |
-+			       (1ULL << VIRTIO_VSOCK_F_DGRAM)
+ static const int vhost_vsock_bits[] = {
+ 	VHOST_FEATURES,
+ 	VIRTIO_F_ACCESS_PLATFORM,
+-	VIRTIO_VSOCK_F_SEQPACKET
++	VIRTIO_VSOCK_F_SEQPACKET,
++	VIRTIO_VSOCK_F_DGRAM
  };
  
- enum {
+ #define VHOST_VSOCK_FEATURES VHOST_FEATURES_U64(vhost_vsock_bits, 0)
 @@ -56,6 +57,7 @@ struct vhost_vsock {
  	atomic_t queued_replies;
  

@@ -216,7 +216,7 @@ index 000000000000..3d2bcd8d2ba4
 +	vm_addr.svm_port = VMADDR_PORT_ANY;
 +	vm_addr.svm_cid = VMADDR_CID_ANY;
 +
-+	err = kernel_bind(*csocket, (struct sockaddr *)&vm_addr,
++	err = kernel_bind(*csocket, (struct sockaddr_unsized *)&vm_addr,
 +			  sizeof(struct sockaddr_vm));
 +	if (err) {
 +		pr_debug("%s: error binding port\n", __func__);
@@ -325,7 +325,7 @@ index 000000000000..3d2bcd8d2ba4
 +	return 0;
 +}
 +
-+static int tsi_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
++static int tsi_bind(struct socket *sock, struct sockaddr_unsized *addr, int addr_len)
 +{
 +	struct sock *sk = sock->sk;
 +	struct tsi_sock *tsk;
@@ -371,7 +371,7 @@ index 000000000000..3d2bcd8d2ba4
 +	addr_vsock.svm_cid = VMADDR_CID_ANY;
 +	addr_vsock.svm_port = VMADDR_PORT_ANY;
 +
-+	err = vsocket->ops->bind(vsocket, (struct sockaddr *)&addr_vsock,
++	err = vsocket->ops->bind(vsocket, (struct sockaddr_unsized *)&addr_vsock,
 +				 sizeof(addr_vsock));
 +	if (err) {
 +		pr_debug("%s: error setting up vsock listener: %d\n", __func__,
@@ -402,7 +402,7 @@ index 000000000000..3d2bcd8d2ba4
 +	vm_addr.svm_port = VMADDR_PORT_ANY;
 +	vm_addr.svm_cid = VMADDR_CID_ANY;
 +
-+	err = kernel_bind(vsocket, (struct sockaddr *)&vm_addr,
++	err = kernel_bind(vsocket, (struct sockaddr_unsized *)&vm_addr,
 +			  sizeof(struct sockaddr_vm));
 +	if (err) {
 +		pr_debug("%s: error binding port: %d\n", __func__, err);
@@ -430,7 +430,7 @@ index 000000000000..3d2bcd8d2ba4
 +	return 0;
 +}
 +
-+static int tsi_connect(struct socket *sock, struct sockaddr *addr, int addr_len,
++static int tsi_connect(struct socket *sock, struct sockaddr_unsized *addr, int addr_len,
 +		       int flags)
 +{
 +	struct sock *sk = sock->sk;
@@ -534,7 +534,7 @@ index 000000000000..3d2bcd8d2ba4
 +		else
 +			vm_addr.svm_port = TSI_DEFAULT_PORT;
 +
-+		err = kernel_connect(vsocket, (struct sockaddr *)&vm_addr,
++		err = kernel_connect(vsocket, (struct sockaddr_unsized *)&vm_addr,
 +				     sizeof(struct sockaddr_vm), 0);
 +		if (err < 0) {
 +			pr_debug("%s: error connecting vsock endpoint: %d\n",
