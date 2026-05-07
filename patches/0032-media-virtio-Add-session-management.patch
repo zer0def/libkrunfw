@@ -152,14 +152,14 @@ index 000000000000..1b3b2c279055
 +virtio_media_session_fh_add(struct virtio_media_session *session,
 +			    struct file *file)
 +{
-+	v4l2_fh_add(&session->fh);
++	v4l2_fh_add(&session->fh, file);
 +	session->file = file;
 +}
 +
 +static inline void
 +virtio_media_session_fh_del(struct virtio_media_session *session)
 +{
-+	v4l2_fh_del(&session->fh);
++	v4l2_fh_del(&session->fh, session->file);
 +}
 +
 +#endif // __VIRTIO_MEDIA_SESSION_H

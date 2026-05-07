@@ -19,16 +19,16 @@ diff --git a/kernel/exit.c b/kernel/exit.c
 index 8ae45b2b8cf9..a1ce1f2b972b 100644
 --- a/kernel/exit.c
 +++ b/kernel/exit.c
-@@ -68,6 +68,8 @@
- #include <linux/rethook.h>
+@@ -69,6 +69,8 @@
  #include <linux/sysfs.h>
  #include <linux/user_events.h>
+ #include <linux/unwind_deferred.h>
 +#include <linux/reboot.h>
 +
  #include <linux/uaccess.h>
+ #include <linux/pidfs.h>
  
- #include <uapi/linux/wait.h>
-@@ -911,8 +913,12 @@ void __noreturn do_exit(long code)
+@@ -905,8 +907,12 @@ void __noreturn do_exit(long code)
  		 * immediately to get a useable coredump.
  		 */
  		if (unlikely(is_global_init(tsk)))

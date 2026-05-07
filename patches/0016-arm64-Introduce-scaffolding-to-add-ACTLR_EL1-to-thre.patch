@@ -58,9 +58,9 @@ index 1438424f0064..ea4e32467068 100644
 --- a/arch/arm64/include/asm/processor.h
 +++ b/arch/arm64/include/asm/processor.h
 @@ -185,6 +185,9 @@ struct thread_struct {
- 	u64			svcr;
- 	u64			tpidr2_el0;
- 	u64			por_el0;
+ 	u64			gcs_base;
+ 	u64			gcs_size;
+ #endif
 +#ifdef CONFIG_ARM64_ACTLR_STATE
 +	u64			actlr;
 +#endif
@@ -110,9 +110,9 @@ index c753a0f6183b..f2bf5f7d6dbb 100644
   * Thread switching.
   */
 @@ -608,6 +632,7 @@ struct task_struct *__switch_to(struct task_struct *prev,
- 	cntkctl_thread_switch(prev, next);
  	ptrauth_thread_switch_user(next);
  	permission_overlay_switch(next);
+ 	gcs_thread_switch(next);
 +	actlr_thread_switch(next);
  
  	/*
