@@ -75,10 +75,10 @@ index 06d5b15642ae..6c8791d3bc70 100644
 @@ -257,8 +257,6 @@ void virtio_transport_notify_buffer_size(struct vsock_sock *vsk, u64 *val);
  u64 virtio_transport_stream_rcvhiwat(struct vsock_sock *vsk);
  bool virtio_transport_stream_is_active(struct vsock_sock *vsk);
- bool virtio_transport_stream_allow(u32 cid, u32 port);
+ bool virtio_transport_stream_allow(struct vsock_sock *vsk, u32 cid, u32 port);
 -int virtio_transport_dgram_bind(struct vsock_sock *vsk,
 -				struct sockaddr_vm *addr);
- bool virtio_transport_dgram_allow(u32 cid, u32 port);
+ bool virtio_transport_dgram_allow(struct vsock_sock *vsk, u32 cid, u32 port);
  int virtio_transport_dgram_get_cid(struct sk_buff *skb, unsigned int *cid);
  int virtio_transport_dgram_get_port(struct sk_buff *skb, unsigned int *port);
 diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
@@ -165,7 +165,7 @@ index 8049e3b4f377..9046ea82a37b 100644
 +			goto out;
 +		}
 +
-+		if (!transport->dgram_allow(remote_addr->svm_cid,
++		if (!transport->dgram_allow(vsk, remote_addr->svm_cid,
 +					    remote_addr->svm_port)) {
 +			module_put(transport->module);
  			err = -EINVAL;
@@ -198,9 +198,9 @@ index 8049e3b4f377..9046ea82a37b 100644
 -		goto out;
 -	}
  
--	if (!transport->dgram_allow(remote_addr->svm_cid,
+-	if (!transport->dgram_allow(vsk, remote_addr->svm_cid,
 -				    remote_addr->svm_port)) {
-+		if (!transport->dgram_allow(remote_addr->svm_cid,
++		if (!transport->dgram_allow(vsk, remote_addr->svm_cid,
 +					    remote_addr->svm_port)) {
 +			err = -EINVAL;
 +			goto out;
@@ -227,7 +227,7 @@ index 8049e3b4f377..9046ea82a37b 100644
 +	if (err)
 +		goto out;
 +
- 	if (!vsk->transport->dgram_allow(remote_addr->svm_cid,
+ 	if (!vsk->transport->dgram_allow(vsk, remote_addr->svm_cid,
  					 remote_addr->svm_port)) {
  		err = -EINVAL;
  		goto out;
